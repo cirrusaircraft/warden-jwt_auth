@@ -6,7 +6,7 @@ module Warden
   module JWTAuth
     # Decodes a JWT into a hash payload into a JWT token
     class TokenDecoder
-      include JWTAuth::Import['decoding_secret', 'rotation_secret', 'algorithm']
+      include JWTAuth::Import['decoding_secret', 'rotation_secret', 'algorithm', 'jwks_loader']
 
       # Decodes the payload from a JWT as a hash
       #
@@ -24,11 +24,12 @@ module Warden
       private
 
       def decode(token, secret)
+        options = { algorithm: algorithm, verify_jti: true }
+        options[:jwks_loader] = jwks_loader if jwks_loader
         JWT.decode(token,
                    secret,
                    true,
-                   algorithm: algorithm,
-                   verify_jti: true)[0]
+                   options)[0]
       end
     end
   end

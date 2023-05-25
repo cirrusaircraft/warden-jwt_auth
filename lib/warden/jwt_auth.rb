@@ -103,6 +103,9 @@ module Warden
             default: {},
             constructor: ->(value) { constantize_values(symbolize_keys(value)) })
 
+    # Proc that periodically retrieves the JWKS from the authorization server
+    setting :jwks_loader, default: nil
+
     Import = Dry::AutoInject(config)
   end
 end
